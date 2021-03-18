@@ -11,12 +11,11 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Compiling
-      - npm pack
+      - echo dummy compiling
   post_build:
     commands:
       - echo Build completed on `date`
 # Include only the files required for your application to run.
 artifacts:
   files:
-    - node-app*.tgz
+    - '**/*'
