@@ -8,13 +8,13 @@ hooks:
   BeforeInstall:
     - location: scripts/before-install.sh
       timeout: 300
-      runas:  xeniuser
+      runas: root
   ApplicationStop:
     - location: scripts/application-stop.sh
       timeout: 300
-      runas: xeniuser
+      runas: root
   ApplicationStart:
     - location: scripts/application-start.sh
       timeout: 300
-      runas: xeniuser
+      runas: root
 
