@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: /build/
+    destination: /opt/xeniuser/
+    overwrite: true
+hooks:
+  BeforeInstall:
+    - location: scripts/before-install.sh
+      timeout: 300
+  AfterInstall:
+    - location: scripts/after-install.sh
+      timeout: 300
+
