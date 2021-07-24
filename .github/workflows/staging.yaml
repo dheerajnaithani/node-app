@@ -37,13 +37,13 @@ jobs:
       - name: Run ESLint
         # Run the lint custom NPM command that triggers the
         # ESLint linter check
-        run: npm run lint
+        run: yarn run lint
         continue-on-error: true
 
       - name: Run Prettier
         # Run the format:check custom NPM command
         # that runs prettier to check code format
-        run: npm run format:check
+        run: yarn run format:check
         continue-on-error: true
 
       - name: Set Up AWS credentials
