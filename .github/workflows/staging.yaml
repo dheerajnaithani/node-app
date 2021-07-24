@@ -12,10 +12,12 @@ jobs:
       - name: Set env to dev
         if: endsWith(github.ref, '/staging')
         run: |
+          echo "XENIENV_NAME=dev" >> $GITHUB_ENV
           echo "XENIENV_NAME=dev" >> env.txt
       - name: Set env to prod
         if: endsWith(github.ref, '/main')
         run: |
+          echo "XENIENV_NAME=prod" >> $GITHUB_ENV
           echo "XENIENV_NAME=prod" >> env.txt
       - name: Set App Name
         run: echo "APP_NAME=Xeniapp-backend-${{ env.XENIENV_NAME }}" >> env.txt
@@ -39,7 +41,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: env-vars
-      - name: Set Deploy Group
+      - name: Set Env vars
         run: cat env.txt >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
