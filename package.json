@@ -2,9 +2,9 @@
   "name": "node-app",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/bin/start-server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-dev-server": "nodemon src/bin/start-server.js --color"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,16 @@
   },
   "homepage": "https://github.com/dheerajnaithani/node-app#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "dotenv": "^10.0.0",
+    "eslint": "^7.31.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.12",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
   }
 }
