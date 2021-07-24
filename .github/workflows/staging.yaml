@@ -17,11 +17,11 @@ jobs:
         if: endsWith(github.ref, '/main')
         run: |
           echo "XENIENV_NAME=prod" >> $GITHUB_ENV
-      - name: Set Enrironment Variables
+      - name: Set Envrironment Variables
         run: |
-          echo "APP_NAME=Xeniapp-backend-${{ XENIENV_NAME }}" >> $GITHUB_ENV
-          echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ XENIENV_NAME }}" >> $GITHUB_ENV
-          echo "S3-FILENAME=${{ XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z" >> $GITHUB_ENV
-          echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ XENIENV_NAME }}" >> $GITHUB_ENV
+          echo "APP_NAME=Xeniapp-backend-${{ env.XENIENV_NAME }}" >> $GITHUB_ENV
+          echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ env.XENIENV_NAME }}" >> $GITHUB_ENV
+          echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z" >> $GITHUB_ENV
+          echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ env.XENIENV_NAME }}" >> $GITHUB_ENV
 
-  
+
