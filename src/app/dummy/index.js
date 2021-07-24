@@ -8,6 +8,7 @@ function createHandlers() {
         Compute: ['Ec2', 'Batch', 'Outposts', 'Lambda'],
         MachineLearning: ['SageMaker', 'AugmentedAI'],
         Storage: ['EBS', 'EFS', 'S3', 'Backup'],
+        Analytics: ['Athena', 'CloudSearch', 'ElasticSearch', 'EMR'],
       }
       resolve(services)
     })
