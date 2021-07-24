@@ -40,4 +40,4 @@ jobs:
       - name: Run Prettier
         run: yarn run format:check
       - name: Create package
-        run : node node_modules/.bin/npm-pack-all --output ${{ S3-FILENAME }}.tgz
+        run : node node_modules/.bin/npm-pack-all --output ${{ env.S3-FILENAME }}.tgz
