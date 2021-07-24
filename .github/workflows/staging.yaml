@@ -12,24 +12,35 @@ jobs:
       - name: Set env to dev
         if: endsWith(github.ref, '/staging')
         run: |
-          echo "XENIENV_NAME=dev" >> $GITHUB_ENV
+          echo "XENIENV_NAME=dev" >> env.txt
       - name: Set env to prod
         if: endsWith(github.ref, '/main')
         run: |
-          echo "XENIENV_NAME=prod" >> $GITHUB_ENV
+          echo "XENIENV_NAME=prod" >> env.txt
       - name: Set App Name
-        run: echo "APP_NAME=Xeniapp-backend-${{ env.XENIENV_NAME }}" >> $GITHUB_ENV
+        run: echo "APP_NAME=Xeniapp-backend-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Set Bucket Name
-        run:  echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ env.XENIENV_NAME }}" >> $GITHUB_ENV
+        run:  echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Set File Name
-        run: echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z" >> $GITHUB_ENV
+        run: echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z" >> env.txt
       - name: Set Deploy Group
-        run: echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ env.XENIENV_NAME }}" >> $GITHUB_ENV
+        run: echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ env.XENIENV_NAME }}" >> env.txt
+      - name: Upload env-vars
+        uses: actions/upload-artifact@v2
+        with:
+          name: env-vars
+          path: env.txt
 
   build-and-test:
     needs: init
     runs-on: ubuntu-latest
     steps:
+      - name: Download env-vars
+        uses: actions/download-artifact@v2
+        with:
+          name: env-vars
+      - name: Set Deploy Group
+        run: echo "cat env.txt" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
 
