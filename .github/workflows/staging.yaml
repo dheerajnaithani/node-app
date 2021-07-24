@@ -24,7 +24,7 @@ jobs:
       - name: Set Bucket Name
         run:  echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Set File Name
-        run: echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z" >> env.txt
+        run: echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z.tgz" >> env.txt
       - name: Set Deploy Group
         run: echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Upload env-vars
@@ -33,7 +33,7 @@ jobs:
           name: env-vars
           path: env.txt
 
-  build-and-test:
+  build-test-and-upload:
     needs: init
     runs-on: ubuntu-latest
     steps:
@@ -55,4 +55,34 @@ jobs:
       - name: Run Prettier
         run: yarn run format:check
       - name: Create package
-        run : node node_modules/.bin/npm-pack-all --output ${{ env.S3-FILENAME }}.tgz
+        run : node node_modules/.bin/npm-pack-all --output ${{ env.S3-FILENAME }}
+
+      - name: Install AWS CLI 2
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
+      - name: Set Up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: AWS Deploy push
+        run: |
+          aws deploy push \
+          --application-name ${{ env.APP_NAME }} \
+          --description "This is a revision for the ${{ env.APP_NAME }}-${{ github.sha }}" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ env.S3-BUCKET }}/${{ env.S3-FILENAME }} \
+          --source .
+      # Create deployment to CodeDeploy
+      - name: AWS Create Deployment
+        run: |
+          aws deploy create-deployment \
+           --application-name ${{ env.APP_NAME }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ env.DEPLOY-GROUP }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ env.S3-BUCKET }},key=${{ env.S3-FILENAME }},bundleType=tgz \
