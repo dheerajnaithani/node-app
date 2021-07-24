@@ -2,7 +2,7 @@ const express = require('express')
 
 function createHandlers() {
   function listServices(req, res, next) {
-    const p = new Promise((resolve) => {
+    return new Promise((resolve) => {
       const services = {
         DevTools: ['CodeBuild', 'CodePipeline', 'CodeDeploy'],
         Compute: ['Ec2', 'Batch', 'Outposts', 'Lambda'],
@@ -11,7 +11,6 @@ function createHandlers() {
       }
       resolve(services)
     })
-    return p
       .then((data) => res.status(200).json({ services: data }))
       .catch(next)
   }
@@ -28,7 +27,10 @@ function createListServices() {
 
   router.route('/').get(handlers.listServices)
 
-  return { handlers, router }
+  return {
+    handlers,
+    router,
+  }
 }
 
 module.exports = createListServices

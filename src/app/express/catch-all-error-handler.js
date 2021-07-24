@@ -1,6 +1,7 @@
 const logger = require('../utils/logger')
 
-function catchAllErrorHandler(err, req, res) {
+// eslint-disable-next-line no-unused-vars
+function catchAllErrorHandler(err, req, res, next) {
   const traceId = req.context ? req.context.traceId : 'none'
 
   logger.error(traceId)

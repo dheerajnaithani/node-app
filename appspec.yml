@@ -2,8 +2,18 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /opt/xeniuser/
+    destination: /opt/xeniuser/node-app/
     overwrite: true
+permissions:
+  - object: /opt/xeniuser/node-app/
+    pattern: "**"
+    owner: xeniuser
+    group: xeniusergroup
+    mode: 755
+    type:
+      - directory
+      - file
+
 hooks:
   BeforeInstall:
     - location: scripts/before-install.sh
@@ -12,9 +22,9 @@ hooks:
   ApplicationStop:
     - location: scripts/application-stop.sh
       timeout: 300
-      runas: root
+      runas: xeniuser
   ApplicationStart:
     - location: scripts/application-start.sh
       timeout: 300
-      runas: root
+      runas: xeniuser
 
