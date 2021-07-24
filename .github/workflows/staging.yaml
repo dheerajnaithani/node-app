@@ -24,4 +24,20 @@ jobs:
           echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z" >> $GITHUB_ENV
           echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ env.XENIENV_NAME }}" >> $GITHUB_ENV
 
+  build-and-test:
+    needs: init
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
+      - name: Install Packages
+        run: yarn install
+
+      - name: Run ESLint
+        run: yarn run lint
+
+      - name: Run Prettier
+        run: yarn run format:check
+      - name: Create package
+        run : node node_modules/.bin/npm-pack-all --output ${{ S3-FILENAME }}.tgz
