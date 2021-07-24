@@ -24,7 +24,9 @@ jobs:
       - name: Set Bucket Name
         run:  echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Set File Name
-        run: echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z.tgz" >> env.txt # npm pack all generates a tgz
+        run: |
+          SUFFIx=latest
+          echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-${SUFFIx}.tgz" >> env.txt # npm pack all generates a tgz
       - name: Set Deploy Group
         run: echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Upload env-vars
