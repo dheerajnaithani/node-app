@@ -40,7 +40,7 @@ jobs:
         with:
           name: env-vars
       - name: Set Deploy Group
-        run: echo "cat env.txt" >> $GITHUB_ENV
+        run: cat env.txt >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
 
