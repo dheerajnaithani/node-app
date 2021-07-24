@@ -1,5 +1,5 @@
 function mountRoutes(app, config) {
-    app.use('/', config.listServices.router)
+  app.use('/', config.listServices.router)
 }
 
-module.exports = mountRoutes;
+module.exports = mountRoutes

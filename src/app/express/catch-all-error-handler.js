@@ -1,12 +1,11 @@
 const logger = require('../utils/logger')
 
-function catchAllErrorHandler(err, req, res, next) {
-    const traceId = req.context ? req.context.traceId : 'none'
+function catchAllErrorHandler(err, req, res) {
+  const traceId = req.context ? req.context.traceId : 'none'
 
-    logger.error(traceId)
+  logger.error(traceId)
 
-    res.status(500).send('error')
-
+  res.status(500).send('error')
 }
 
 module.exports = catchAllErrorHandler
