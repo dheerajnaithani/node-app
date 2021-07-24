@@ -23,54 +23,5 @@ jobs:
           echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ XENIENV_NAME }}" >> $GITHUB_ENV
           echo "S3-FILENAME=${{ XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z" >> $GITHUB_ENV
           echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ XENIENV_NAME }}" >> $GITHUB_ENV
-  build-and-test:
-    needs: init
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
 
-      - name: Install Packages
-        run: yarn install
-
-      - name: Run ESLint
-        run: yarn run lint
-
-      - name: Run Prettier
-        run: yarn run format:check
-      - name: Create package
-
-  deploy:
-    needs: build-and-test
-    name : CD Pipeline
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install AWS CLI 2
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-
-      - name: Set Up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: AWS Deploy push
-        run: |
-          aws deploy push \
-          --application-name ${{ APP_NAME }} \
-          --description "This is a revision for the ${{ APP_NAME }}-${{ github.sha }}" \
-          --ignore-hidden-files \
-          --s3-location s3://${{ S3-BUCKET }}/${{ S3-FILENAME }}.zip \
-          --source .
-      # Create deployment to CodeDeploy
-      - name: AWS Create Deployment
-        run: |
-          aws deploy create-deployment \
-           --application-name ${{ APP_NAME }} \
-           --deployment-config-name CodeDeployDefault.OneAtATime \
-           --deployment-group-name ${{ DEPLOY-GROUP }} \
-           --file-exists-behavior OVERWRITE \
-           --s3-location bucket=${{ S3-BUCKET }},key=${{ S3-FILENAME }}.zip,bundleType=zip \
+  
