@@ -23,10 +23,15 @@ jobs:
         run: echo "APP_NAME=Xeniapp-backend-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Set Bucket Name
         run:  echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ env.XENIENV_NAME }}" >> env.txt
-      - name: Set File Name
+      - name: Set Generated package Name
         run: |
-          SUFFIx=latest
-          echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-${SUFFIx}.tgz" >> env.txt # npm pack all generates a tgz
+          SUFFIX=latest
+          echo "FILENAME=backend-${SUFFIX}.tgz" >> env.txt # npm pack all generates a tgz
+          echo "FILENAME=backend-${SUFFIX}.tgz" >> $GITHUB_ENV
+      - name: Set S3 Location
+        run: |
+          echo "S3_FILENAME=${{ env.XENIENV_NAME }}/${{ env.FILENAME }}" >> env.txt
+
       - name: Set Deploy Group
         run: echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Upload env-vars
@@ -57,7 +62,7 @@ jobs:
       - name: Run Prettier
         run: yarn run format:check
       - name: Create package
-        run : node node_modules/.bin/npm-pack-all --output ${{ env.S3-FILENAME }}
+        run : node node_modules/.bin/npm-pack-all --output ${{ env.FILENAME }}
 
       - name: Set Up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -65,14 +70,18 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: AWS Deploy push
+
+      - name: Upoload to S3
         run: |
-          aws deploy push \
+          aws s3 cp ${{ env.FILENAME }} s3://${{ env.S3-BUCKET }}/${{ env.S3_FILENAME }} --file-exists-behavior OVERWRITE \
+
+      - name: AWS Deploy Register Application
+        run: |
+          aws deploy register-application-revision  \
           --application-name ${{ env.APP_NAME }} \
           --description "This is a revision for the ${{ env.APP_NAME }}-${{ github.sha }}" \
-          --ignore-hidden-files \
-          --s3-location s3://${{ env.S3-BUCKET }}/${{ env.S3-FILENAME }} \
-          --source .
+          --s3-location bucket=${{ env.S3-BUCKET }},key=${{ env.S3_FILENAME }},bundleType=tgz,bundleType=tgz \
+
       # Create deployment to CodeDeploy
       - name: AWS Create Deployment
         run: |
@@ -80,5 +89,5 @@ jobs:
            --application-name ${{ env.APP_NAME }} \
            --deployment-config-name CodeDeployDefault.OneAtATime \
            --deployment-group-name ${{ env.DEPLOY-GROUP }} \
-           --file-exists-behavior OVERWRITE \
-           --s3-location bucket=${{ env.S3-BUCKET }},key=${{ env.S3-FILENAME }},bundleType=tgz \
+           --description "Deployment for the ${{ env.APP_NAME }}-${{ github.sha }}" \
+           --s3-location bucket=${{ env.S3-BUCKET }},key=${{ env.S3_FILENAME }},bundleType=tgz \
