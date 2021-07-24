@@ -24,7 +24,7 @@ jobs:
       - name: Set Bucket Name
         run:  echo "S3-BUCKET=xeniapp-backend-codedeploy-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Set File Name
-        run: echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z.tgz" >> env.txt
+        run: echo "S3-FILENAME=${{ env.XENIENV_NAME }}/backend-$(date --iso-8601=seconds)Z.tgz" >> env.txt # npm pack all generates a tgz
       - name: Set Deploy Group
         run: echo "DEPLOY-GROUP=Xeniapp-backend-dep-group-${{ env.XENIENV_NAME }}" >> env.txt
       - name: Upload env-vars
@@ -56,12 +56,6 @@ jobs:
         run: yarn run format:check
       - name: Create package
         run : node node_modules/.bin/npm-pack-all --output ${{ env.S3-FILENAME }}
-
-      - name: Install AWS CLI 2
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
 
       - name: Set Up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
