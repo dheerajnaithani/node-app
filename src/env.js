@@ -2,15 +2,16 @@ const dotenv = require('dotenv')
 const packageJson = require('../package.json')
 
 const envResult = dotenv.config()
+const logger = require('./app/utils/logger')
 
 if (envResult.error) {
-  console.error(`${'[ERROR] env failed to load:'} ${envResult.error}`)
+  logger.error(`${'[ERROR] env failed to load:'} ${envResult.error}`)
   process.exit()
 }
 
 function requireFromEnv(key) {
   if (!process.env[key]) {
-    console.error(`${'[APP ERROR] Missing env variable:'} ${key}`)
+    logger.error(`${'[APP ERROR] Missing env variable:'} ${key}`)
     return process.exit(1)
   }
   return process.env[key]
