@@ -73,7 +73,7 @@ jobs:
 
       - name: Upoload to S3
         run: |
-          aws s3 cp ${{ env.FILENAME }} s3://${{ env.S3-BUCKET }}/${{ env.S3_FILENAME }} --file-exists-behavior OVERWRITE \
+          aws s3 cp ${{ env.FILENAME }} s3://${{ env.S3-BUCKET }}/${{ env.S3_FILENAME }} \
 
       - name: AWS Deploy Register Application
         run: |
