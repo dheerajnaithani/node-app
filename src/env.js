@@ -24,7 +24,7 @@ const commonProperties = {
   env: requireFromEnv('NODE_ENV'),
   port: parseInt(requireFromEnv('PORT'), 10),
   version: packageJson.version,
-  bookingDb: requireFromEnv('PORT'),
+  bookingDb: requireFromEnv('BOOKING_DB'),
 }
 
 if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'prod') {
@@ -37,18 +37,16 @@ if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'prod') {
   ]).then((values) => {
     module.exports = {
       ...commonProperties,
-      booking_db_connection_string: values[0],
-      booking_db_app_user: values[1],
-      booking_db_app_password: values[2],
+      bookingDbConnectionString: values[0],
+      bookingDbAppuser: values[1],
+      bookingDbAppPwd: values[2],
     }
   })
 } else {
   module.exports = {
     ...commonProperties,
-    booking_db_connection_string: requireFromEnv(
-      'BOOKING_DB_CONNECTION_STRING',
-    ),
-    booking_db_app_user: requireFromEnv('BOOKING_DB_USER_NAME'),
-    booking_db_app_password: requireFromEnv('BOOKING_DB_USER_NAME'),
+    bookingDbConnectionString: requireFromEnv('BOOKING_DB_CONNECTION_STRING'),
+    bookingDbAppuser: requireFromEnv('BOOKING_DB_USER_NAME'),
+    bookingDbAppPwd: requireFromEnv('BOOKING_DB_USER_NAME'),
   }
 }
