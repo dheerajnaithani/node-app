@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/bin/start-server.js",
   "scripts": {
-    "start:local": "nodemon src/bin/start-server.js --color"
+    "start:local": "nodemon src/bin/start-server.js --color",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint:fix": "yarn run lint --fix",
     "format:check": "prettier --check ./src"
