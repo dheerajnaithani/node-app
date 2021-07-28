@@ -65,7 +65,7 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "__DEPLOYMENT_ENV_NAME__"
-          replace: {{ env.XENIENV_NAME }}
+          replace: "{{ env.XENIENV_NAME }}"
           include: scripts/application-start.sh
       - name: Create package
         run : node node_modules/.bin/npm-pack-all --output ${{ env.FILENAME }}
