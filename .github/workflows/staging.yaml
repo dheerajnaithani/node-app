@@ -68,7 +68,7 @@ jobs:
           tokenPrefix: "#${"
           tokenSuffix: "}#"
         env:
-          DEPLOYMENT_ENV_NAME: {{ env.XENIENV_NAME }}
+          DEPLOYMENT_ENV_NAME: ${{ env.XENIENV_NAME }}
 
       - name: Create package
         run : node node_modules/.bin/npm-pack-all --output ${{ env.FILENAME }}
