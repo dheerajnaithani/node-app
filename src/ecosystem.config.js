@@ -9,6 +9,12 @@ const commonEnv = {
     ENV_NAME: 'dev',
     APP_NAME: 'Dev Test Application',
     PORT: 3000,
+    BOOKING_DB_CONNECTION_STRING:
+      '/dev/xeniapp-cluster-dev/xeniapp-dev/connection-string/standard_srv',
+    BOOKING_DB: 'xeni-db-dev',
+    BOOKING_DB_USER_NAME: '/dev/xeniapp-cluster-dev/xeniapp-dev/app-user',
+    BOOKING_DB_PASSWORD:
+      '/dev/xeniapp-cluster-dev/xeniapp-dev/app-user-password',
   },
   prod: {
     ENV_NAME: 'prod',
