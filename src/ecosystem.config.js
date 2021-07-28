@@ -4,22 +4,31 @@ const commonEnv = {
     ENV_NAME: 'local',
     APP_NAME: 'Test Application',
     PORT: 3000,
+    BOOKING_DB: 'xeni-db-dev',
   },
   dev: {
-    ENV_NAME: 'dev',
+    NODE_ENV: 'dev',
     APP_NAME: 'Dev Test Application',
     PORT: 3000,
     BOOKING_DB_CONNECTION_STRING:
       '/dev/xeniapp-cluster-dev/xeniapp-dev/connection-string/standard_srv',
-    BOOKING_DB: 'xeni-db-dev',
     BOOKING_DB_USER_NAME: '/dev/xeniapp-cluster-dev/xeniapp-dev/app-user',
     BOOKING_DB_PASSWORD:
       '/dev/xeniapp-cluster-dev/xeniapp-dev/app-user-password',
+    REGION: 'us-east-1',
+    BOOKING_DB: 'xeni-db-dev',
   },
   prod: {
-    ENV_NAME: 'prod',
+    NODE_ENV: 'prod',
     APP_NAME: 'Test Application',
     PORT: 3000,
+    BOOKING_DB: 'xeni-db-dev',
+    BOOKING_DB_CONNECTION_STRING:
+      '/prod/xeniapp-cluster-prod/xeniapp-prod/connection-string/standard_srv',
+    BOOKING_DB_USER_NAME: '/prod/xeniapp-cluster-prod/xeniapp-prod/app-user',
+    BOOKING_DB_PASSWORD:
+      '/prod/xeniapp-cluster-prod/xeniapp-prod/app-user-password',
+    REGION: 'us-east-1',
   },
 }
 module.exports = {
