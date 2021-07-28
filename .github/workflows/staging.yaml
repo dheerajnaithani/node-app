@@ -64,7 +64,7 @@ jobs:
       - name: Replace environment name
         uses: cschleiden/replace-tokens@v1
         with:
-          filee: scripts/application-start.sh
+          files: scripts/application-start.sh
           tokenPrefix: "#${"
           tokenSuffix: "}#"
         env:
