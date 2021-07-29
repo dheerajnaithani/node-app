@@ -7,7 +7,8 @@ const commonEnv = {
     BOOKING_DB: 'xeni-db-dev',
   },
   dev: {
-    NODE_ENV: 'dev',
+    NODE_ENV: 'development',
+    ENV_NAME: 'dev',
     APP_NAME: 'Dev Test Application',
     PORT: 3000,
     BOOKING_DB_CONNECTION_STRING:
@@ -19,7 +20,8 @@ const commonEnv = {
     BOOKING_DB: 'xeni-db-dev',
   },
   prod: {
-    NODE_ENV: 'prod',
+    NODE_ENV: 'production',
+    ENV_NAME: 'prod',
     APP_NAME: 'Test Application',
     PORT: 3000,
     BOOKING_DB: 'xeni-db-dev',
