@@ -12,28 +12,39 @@ function requireFromEnv(key) {
   return process.env[key]
 }
 
+async function fetchAll(promises) {
+  return (await promises).map((value) => value)
+}
+
 let envConfig
 if (process.env.ENV_NAME === 'dev' || process.env.ENV_NAME === 'prod') {
   logger.info('Loading server config')
 
   const region = requireFromEnv('REGION')
-
-  Promise.all([
-    fetchParameterValue(region, requireFromEnv('BOOKING_DB_CONNECTION_STRING')),
-    fetchParameterValue(region, requireFromEnv('BOOKING_DB_USER_NAME')),
-    fetchSecret(region, requireFromEnv('BOOKING_DB_PASSWORD')),
-  ]).then((values) => {
-    envConfig = {
-      appName: requireFromEnv('APP_NAME'),
-      env: requireFromEnv('NODE_ENV'),
-      port: parseInt(requireFromEnv('PORT'), 10),
-      version: packageJson.version,
-      bookingDb: requireFromEnv('BOOKING_DB'),
-      bookingDbConnectionString: values[0],
-      bookingDbAppuser: values[1],
-      bookingDbAppPwd: values[2],
-    }
-  })
+  const results = fetchAll(
+    Promise.all([
+      fetchParameterValue(
+        region,
+        requireFromEnv('BOOKING_DB_CONNECTION_STRING'),
+      ),
+      fetchParameterValue(region, requireFromEnv('BOOKING_DB_USER_NAME')),
+      fetchSecret(region, requireFromEnv('BOOKING_DB_PASSWORD')),
+    ]),
+  )
+  envConfig = {
+    appName: requireFromEnv('APP_NAME'),
+    env: requireFromEnv('NODE_ENV'),
+    port: parseInt(requireFromEnv('PORT'), 10),
+    version: packageJson.version,
+    bookingDb: requireFromEnv('BOOKING_DB'),
+    bookingDbConnectionString: results[0],
+    bookingDbAppuser: results[1],
+    bookingDbAppPwd: results[2],
+  }
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [key, value] of Object.entries(envConfig)) {
+    logger.info(`${key}: ${value}`)
+  }
 } else {
   logger.info('Loading local config from .env')
   const envResult = dotenv.config()
@@ -54,8 +65,4 @@ if (process.env.ENV_NAME === 'dev' || process.env.ENV_NAME === 'prod') {
   }
 }
 
-// eslint-disable-next-line no-restricted-syntax
-for (const [key, value] of Object.entries(envConfig)) {
-  logger.log(`${key}: ${value}`)
-}
 module.exports = envConfig

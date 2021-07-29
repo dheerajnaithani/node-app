@@ -1,14 +1,16 @@
 const AWS = require('aws-sdk')
 const logger = require('./logger')
 
-function fetchSecret(region, secretName) {
+async function fetchSecret(region, secretName) {
   const client = new AWS.SecretsManager({ region })
   return new Promise((resolve, reject) => {
     client.getSecretValue({ SecretId: secretName }, (err, data) => {
       if (err) {
         reject(err)
       } else {
-        logger.info(`Found secret ${secretName} in secret manager`)
+        logger.info(
+          `Found secret ${secretName} : ${data.SecretString} in secret manager`,
+        )
         resolve(data.SecretString)
       }
     })

@@ -7,7 +7,8 @@
     "start:local": "nodemon src/bin/start-server.js --color --env local",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint:fix": "yarn run lint --fix",
-    "format:check": "prettier --check ./src"
+    "format:check": "prettier --check ./src",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-promise": "^5.1.0",
-    "prettier": "^2.3.2"
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "supertest": "^6.1.4"
   }
 }
