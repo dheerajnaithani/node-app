@@ -1,17 +1,17 @@
 const createExpressApp = require('./app/express')
 const createConfig = require('./config')
-const env = require('./env')
+const envConfig = require('./env')
 const logger = require('./app/utils/logger')
 
-const config = createConfig({ env })
+const config = createConfig({ env: envConfig })
 const app = createExpressApp({ config })
 
 function signalAppStart() {
-  logger.info(`${env.appName} Started on port ${env.port}`)
+  logger.info(`${envConfig.appName} Started on port ${envConfig.port}`)
 }
 
 function start() {
-  app.listen(env.port, signalAppStart)
+  app.listen(envConfig.port, signalAppStart)
 }
 
 module.exports = {

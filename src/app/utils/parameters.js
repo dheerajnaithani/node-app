@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk')
+const logger = require('./logger')
 
 function fetchParameterValue(region, parameterName) {
   const client = new AWS.SSM({ region })
@@ -7,6 +8,7 @@ function fetchParameterValue(region, parameterName) {
       if (err) {
         reject(err)
       } else {
+        logger.info(`${parameterName} id ${data}`)
         resolve(data)
       }
     })
