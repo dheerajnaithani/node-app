@@ -1,18 +1,15 @@
 const AWS = require('aws-sdk')
-const logger = require('./logger')
 
-async function fetchParameterValue(region, parameterName) {
+const fetchParameterValue = (region, parameterName) => {
   const client = new AWS.SSM({ region })
-  return new Promise((resolve, reject) => {
-    client.getParameter({ Name: parameterName }, (err, data) => {
-      if (err) {
-        reject(err)
-      } else {
-        logger.info(`${parameterName} id ${data.Parameter.Value}`)
-        resolve(data.Parameter.Value)
-      }
-    })
+  const result = client.getParameter({ Name: parameterName }, (err, data) => {
+    if (err) {
+      throw err
+    } else {
+      return data.Parameter.Value
+    }
   })
+  return result
 }
 
 module.exports = fetchParameterValue
