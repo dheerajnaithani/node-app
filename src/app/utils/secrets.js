@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk')
+const logger = require('./logger')
 
 function fetchSecret(region, secretName) {
   const client = new AWS.SecretsManager({ region })
@@ -6,6 +7,7 @@ function fetchSecret(region, secretName) {
     if (err) {
       throw err
     } else {
+      logger.info(`${secretName} id ${data.SecretString}`)
       return data.SecretString
     }
   })
